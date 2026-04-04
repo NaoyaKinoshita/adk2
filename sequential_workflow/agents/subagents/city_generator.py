@@ -1,9 +1,10 @@
 from google.adk import Agent
 
+from agents.prompts import city_generator_instruction
+
 city_generator_agent = Agent(
     name="city_generator_agent",
     model="gemini-2.5-flash",
-    instruction="""Return the name of a random city.
-      Return only the name, nothing else.""",
+    instruction=city_generator_instruction(),
     output_schema=str,
 )
