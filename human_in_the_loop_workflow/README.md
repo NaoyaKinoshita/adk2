@@ -1,71 +1,56 @@
-# human_in_the_loop_workflow
+# Human-in-the-Loop 観光プランナー
 
-人間の入力をワークフローの途中に挟む **Human-in-the-Loop** パターンのサンプルです。
-`RequestInput` を `yield` することでワークフローを一時停止し、ユーザーからの入力を待ちます。
-
-参考: https://adk.dev/workflows/human-input/
+人間の入力をワークフローの途中に挟み、必要に応じてプランを調整・再生成する **Human-in-the-Loop** パターンのサンプルです。
+`RequestInput` による入力待ち、ループ構造、および `ctx.state` を利用したセッション跨ぎの状態管理を実証します。
 
 ## ワークフロー
 
-```
-START
-  │
-  ▼
-request_city        # [human input] 観光したい都市名を入力させる
-  │
-  ▼
-itinerary_agent     # 入力された都市の観光プランを生成 (→ Itinerary)
-  │
-  ▼
-request_feedback    # [human input] プランを提示し、フィードバックを求める
-  │
-  ▼
-finalize_agent      # フィードバックを反映した最終プランを生成 (→ str)
-```
-
-## RequestInput の仕組み
-
-`async` 関数の中で `RequestInput` を `yield` するとワークフローが一時停止し、ユーザーの入力を待ちます。
-
-```python
-from google.adk.events import RequestInput
-
-async def request_city(node_input: str):
-    yield RequestInput(
-        message="観光したい都市名を入力してください:",
-        response_schema={"city": str},
-    )
+```mermaid
+graph TD
+    START --> request_city["request_city<br>(都市入力を待つ)"]
+    request_city --> itinerary_agent["itinerary_agent<br>(プラン生成)"]
+    itinerary_agent --> cache_itinerary["cache_itinerary<br>(状態に保存)"]
+    cache_itinerary --> request_feedback["request_feedback<br>(FB入力を待つ)"]
+    request_feedback --> feedback_router{"feedback_router<br>(分岐)"}
+    
+    feedback_router -- "やり直し" --> request_city
+    feedback_router -- "OK / その他" --> build_finalize_input["build_finalize_input<br>(データ結合)"]
+    
+    build_finalize_input --> finalize_agent["finalize_agent<br>(最終調整)"]
+    finalize_agent --> final_itinerary_message["final_itinerary_message<br>(確定表示)"]
+    final_itinerary_message --> END["終了"]
 ```
 
-`payload` を渡すと、ユーザーに構造化データを提示した上でフィードバックを求められます:
+## 主な機能と特徴
 
-```python
-async def request_feedback(node_input: Itinerary):
-    yield RequestInput(
-        message="以下のプランを確認してください:\n...",
-        payload=node_input,
-        response_schema={"feedback": str},
-    )
-```
+1. **ワークフローの一時停止 (`RequestInput`)**:
+   - `yield RequestInput` を使用して、ユーザーが入力を終えるまで実行を一時停止します。
+2. **状態管理 (`ctx.state`)**:
+   - 途中で入力された都市名や生成されたプランをキャッシュし、ルーティング後の後続ノードで再利用します。
+3. **動的ルーティング**:
+   - ユーザーのフィードバック内容に応じて、最初からやり直すか、プランを確定させるかを動的に分岐させます。
+4. **一貫したUIカード表示**:
+   - Pydantic モデル (`Itinerary`) を出力スキーマに指定することで、ADK Web 上でリッチな情報カードを表示します。
 
-## 構成
+## ディレクトリ構成
 
 ```
 agents/
-├── agent.py                  # Workflow 定義 (エントリポイント)
-├── prompts.py                # 各エージェントの instruction 関数
+├── agent.py               # ワークフローのエッジ定義
+├── prompts.py             # プロンプト・インストラクション
 ├── models/
-│   └── itinerary.py          # Itinerary スキーマ
+│   └── itinerary.py       # 観光プランのデータ構造 (Pydantic)
 ├── subagents/
-│   ├── itinerary.py          # ステップ2: 観光プラン生成エージェント
-│   └── finalize.py           # ステップ4: 最終プラン生成エージェント
+│   ├── itinerary.py       # 初期プラン生成エージェント
+│   └── finalize.py        # 最終調整用エージェント
 └── tools/
-    └── human_steps.py        # ステップ1,3: RequestInput 関数
+    ├── human_steps.py     # RequestInput を含むヒューマンステップ
+    ├── router.py          # フィードバック内容に基づくルーティング
+    └── cache.py           # 状態保存および最終メッセージ生成
 ```
 
-## 実行
+## 実行方法
 
 ```bash
-source .venv/bin/activate
 adk web human_in_the_loop_workflow
 ```
