@@ -33,7 +33,7 @@ root_agent = Workflow(
             feedback_router,
             {
                 "RESTART": request_city,  # 最初のステップに戻る
-                "FINALIZE": build_finalize_input,  # ctx.state からプランとフィードバックを取得し、後続へ渡す
+                "FINALIZE": build_finalize_input,  # state からプランとフィードバックを取得し、後続へ渡す
             },
         ),
         # ルーターにより確定ルートが選ばれた場合、プラン調整と終了メッセージを実行する

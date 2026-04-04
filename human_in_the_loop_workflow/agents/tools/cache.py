@@ -9,9 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 def cache_itinerary(node_input: Itinerary) -> Event:
-    """itinerary_agent の出力をセッション状態に保存し、次のノードへ渡す。
-    ドキュメントの推奨に従い、Event の state パラメータを利用。
-    """
+    """itinerary_agent の出力をセッション状態に保存し、次のノードへ渡す。"""
     logger.info(f"cache_itinerary: city={node_input.city}")
     return Event(
         output=node_input,
@@ -22,14 +20,12 @@ def cache_itinerary(node_input: Itinerary) -> Event:
 def build_finalize_input(
     node_input: str | None, cached_itinerary: str, cached_feedback: str
 ) -> str:
-    """引数インジェクションを利用して state からプランとフィードバックを取得する。
-    ドキュメントの推奨に従い、state のキー名と同名の引数で値を受け取る。
-    """
-    result = (
-        f"## 観光プラン\n{cached_itinerary}\n\n## ユーザーのフィードバック\n{cached_feedback}"
-    )
+    """stateからプランとフィードバックを取得する。"""
+    result = f"## 観光プラン\n{cached_itinerary}\n\n## ユーザーのフィードバック\n{cached_feedback}"
     logger.info(f"build_finalize_input: feedback={cached_feedback}")
-    logger.info(f"build_finalize_input: returning {len(result)} chars to finalize_agent")
+    logger.info(
+        f"build_finalize_input: returning {len(result)} chars to finalize_agent"
+    )
     return result
 
 
