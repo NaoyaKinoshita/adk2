@@ -1,7 +1,6 @@
 # NOTE: ctx.state を使ったセッションスコープの状態管理。
-# ctx.state は EXPERIMENTAL 機能であり、将来的に API が変更される可能性がある。
-# 参考: google.adk.agents.context.Context.state
-# グローバル変数と異なりセッション単位で分離されるため、複数ユーザーの同時実行でも安全。
+# ctx.state は EXPERIMENTAL 機能であり、将来的にAPIが変更される可能性があるため注意して使用すること
+# セッション単位で分離されるため、複数ユーザーの同時実行でも安全
 
 import logging
 from typing import Optional
