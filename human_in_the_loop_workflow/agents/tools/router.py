@@ -20,5 +20,5 @@ def feedback_router(node_input: str, ctx: Context) -> Event:
     if "やり直し" in node_input:
         logger.info("feedback_router: route=RESTART")
         return Event(route="RESTART")
-    logger.info("feedback_router: route=FINALIZE, feedback=%s", node_input)
+    logger.info(f"feedback_router: route=FINALIZE, feedback={node_input}")
     return Event(route="FINALIZE")

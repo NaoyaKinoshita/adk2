@@ -17,11 +17,7 @@ logger = logging.getLogger(__name__)
 
 def cache_itinerary(node_input: Itinerary, ctx: Context) -> Itinerary:
     """itinerary_agent の出力をセッション状態にキャッシュし、そのまま次のノードへ渡す。"""
-    logger.info(
-        "cache_itinerary: city=%s, activities=%s",
-        node_input.city,
-        node_input.activities,
-    )
+    logger.info(f"cache_itinerary: city={node_input.city}")
     ctx.state[ITINERARY_KEY] = node_input.model_dump_json()
     return node_input
 
@@ -33,10 +29,8 @@ def build_finalize_input(node_input: str | None, ctx: Context) -> str:
     result = (
         f"## 観光プラン\n{itinerary_json}\n\n## ユーザーのフィードバック\n{feedback}"
     )
-    logger.info("build_finalize_input: feedback=%s", feedback)
-    logger.info(
-        "build_finalize_input: returning %d chars to finalize_agent", len(result)
-    )
+    logger.info(f"build_finalize_input: feedback={feedback}")
+    logger.info(f"build_finalize_input: returning {len(result)} chars to finalize_agent")
     return result
 
 
