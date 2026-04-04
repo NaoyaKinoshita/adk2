@@ -1,8 +1,8 @@
 def city_generator_instruction() -> str:
-    return """Return the name of a random city.
-      Return only the name, nothing else."""
+    return """ランダムな都市名を1つ返してください。
+      都市名のみを返し、それ以外は何も出力しないでください。"""
 
 
 def city_report_instruction() -> str:
-    return """Output following line:
-    It is {CityTime.time_info} in {CityTime.city} right now."""
+    return """以下の形式で出力してください:
+    現在、{CityTime.city} は {CityTime.time_info} です。"""

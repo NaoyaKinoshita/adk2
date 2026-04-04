@@ -1,14 +1,14 @@
 def topic_generator_instruction() -> str:
     return """
-Choose one topic randomly from the following list and return only the topic name, nothing else:
+以下のリストからトピックをランダムに1つ選び、トピック名のみを返してください。それ以外は何も出力しないでください:
 - sports
 - tech
 """
 
 
 def sports_instruction() -> str:
-    return """Write a short one-sentence sports news headline."""
+    return """スポーツニュースの見出しを1文で簡潔に書いてください。"""
 
 
 def tech_instruction() -> str:
-    return """Write a short one-sentence tech news headline."""
+    return """テクノロジーニュースの見出しを1文で簡潔に書いてください。"""

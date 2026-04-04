@@ -42,5 +42,6 @@ agents/
 ## 実行
 
 ```bash
-uv run adk web sequential_workflow/agents/
+source .venv/bin/activate
+adk web sequential_workflow
 ```

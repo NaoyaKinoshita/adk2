@@ -59,5 +59,6 @@ GOOGLE_GENAI_USE_VERTEXAI=True
 ## 実行
 
 ```bash
-uv run adk run sequential_workflow/
+source .venv/bin/activate
+adk web sequential_workflow
 ```
