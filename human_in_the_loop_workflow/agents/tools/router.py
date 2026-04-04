@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 def feedback_router(node_input: str, ctx: Context) -> Event:
     """フィードバックを state に保存し、内容に応じてルーティングする。
     - 「やり直し」を含む場合 → RESTART (request_city に戻る)
-    - それ以外              → FINALIZE (build_finalize_input に進む)
+    - それ以外 → FINALIZE (build_finalize_input に進む)
 
     NOTE: ルーティング後の遷移先ノードには node_input が None で渡されるため、
     フィードバックを ctx.state に保存して引き継ぐ。

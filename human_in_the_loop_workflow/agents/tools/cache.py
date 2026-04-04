@@ -30,7 +30,9 @@ def build_finalize_input(node_input: str | None, ctx: Context) -> str:
         f"## 観光プラン\n{itinerary_json}\n\n## ユーザーのフィードバック\n{feedback}"
     )
     logger.info(f"build_finalize_input: feedback={feedback}")
-    logger.info(f"build_finalize_input: returning {len(result)} chars to finalize_agent")
+    logger.info(
+        f"build_finalize_input: returning {len(result)} chars to finalize_agent"
+    )
     return result
 
 
@@ -49,12 +51,12 @@ def final_itinerary_message(node_input: Optional[Itinerary], ctx: Context) -> Ev
 
         itinerary = Itinerary.model_validate_json(itinerary_json)
 
-    activities_text = "\n".join([f"- {a}" for a in itinerary.activities])
+    activities_text = "\n".join(
+        [f"- {_activity}" for _activity in itinerary.activities]
+    )
     message = (
         f"## 【確定】{itinerary.city}の観光プラン\n\n"
         f"{activities_text}\n\n"
         "観光プランが確定しました！良い旅を！"
     )
     return Event(message=message)
-
-
