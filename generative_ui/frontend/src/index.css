@@ -1,0 +1,75 @@
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Hiragino Sans", sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.layout {
+  max-width: 960px;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.layout h1 {
+  font-size: 18px;
+  margin: 16px 0 8px;
+}
+
+.chat {
+  flex: 1;
+  min-height: 0;
+}
+
+.chart-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+}
+
+.chart-card.muted {
+  color: #64748b;
+}
+
+.chart-title {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.chart-meta {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.chart-meta pre {
+  white-space: pre-wrap;
+  background: #f1f5f9;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  max-height: 320px;
+}
+
+.table-wrap table {
+  border-collapse: collapse;
+  font-size: 13px;
+  width: 100%;
+}
+
+.table-wrap th,
+.table-wrap td {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 4px 8px;
+  text-align: left;
+  white-space: nowrap;
+}

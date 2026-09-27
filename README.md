@@ -1,6 +1,6 @@
 # Google ADK 2.0 検証プロジェクト (adk2)
 
-Google ADK 2.0 (Agent Development Kit) の検証用リポジトリ。
+Google ADK 2.x (Agent Development Kit) の検証用リポジトリ。
 Vertex AI (Gemini) を使用した様々なマルチエージェント・ワークフローのサンプルを収録しています。
 
 ## ワークフロー・サンプル
@@ -17,6 +17,8 @@ Vertex AI (Gemini) を使用した様々なマルチエージェント・ワー�
    - ループや複雑な分岐を含む、グラフベースの高度なルーティング・ワークフロー。
 5. **[human_in_the_loop_workflow](./human_in_the_loop_workflow/)**: 
    - ユーザーのフィードバックを求め、その内容を反映して再生成したり確定したりする、人間が介在するワークフロー。
+6. **[generative_ui](./generative_ui/)**: 
+   - 自然言語の質問から BigQuery のデータを取得し、エージェントが選んだチャートを React (CopilotKit + Recharts) に描画する Generative UI の技術検証。
 
 ## セットアップ
 
