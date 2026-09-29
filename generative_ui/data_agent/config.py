@@ -20,7 +20,7 @@ LLM_RETRY_OPTIONS = types.HttpRetryOptions(
 BQ_COMPUTE_PROJECT_ID = os.getenv("BQ_COMPUTE_PROJECT_ID") or os.getenv(
     "GOOGLE_CLOUD_PROJECT"
 )
-BQ_DATASET = os.getenv("BQ_DATASET", "bigquery-public-data.thelook_ecommerce")
+BQ_DATASET = os.getenv("BQ_DATASET", "healthy-matter-465806-v4.genui_demo")
 BQ_LOCATION = os.getenv("BQ_LOCATION") or None
 # チャート描画に使う最大行数 (execute_sql の LIMIT 相当)
 BQ_MAX_RESULT_ROWS = 1000

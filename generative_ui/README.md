@@ -46,15 +46,39 @@ gcloud auth application-default login
 # 環境変数
 cp generative_ui/.env.example generative_ui/.env   # GOOGLE_CLOUD_PROJECT などを編集
 
+# デモ用データを BigQuery に作成 (何度実行しても同じ状態になる)
+(cd generative_ui && uv run python -m demo_data.load)
+
 # フロント
-cd generative_ui/frontend && npm install
+(cd generative_ui/frontend && npm install)
 ```
 
 実行ユーザー (ADC) には以下の権限が必要です。
 
 - Vertex AI ユーザー (`roles/aiplatform.user`)
 - BigQuery ジョブユーザー (`roles/bigquery.jobUser`、課金先プロジェクト)
-- BigQuery データ閲覧者 (`roles/bigquery.dataViewer`、対象データセット。公開データセットは不要)
+- BigQuery データ閲覧者 (`roles/bigquery.dataViewer`、対象データセット)
+- デモ用データの作成時のみ: BigQuery データ編集者 (`roles/bigquery.dataEditor`)
+
+### デモ用データ (`demo_data/`)
+
+架空の EC 売上データを `healthy-matter-465806-v4.genui_demo` (asia-northeast1) に作成します。
+プロジェクト・データセット・ロケーションは `--project` / `--dataset` / `--location` で変更できます。
+
+| テーブル | 行数 | 内容 |
+|---|---|---|
+| `customers` | 3,000 | 会員マスタ (都道府県・年代・性別・会員ランク・登録日) |
+| `products` | 36 | 商品マスタ (6カテゴリ、定価・原価) |
+| `orders` | 約4.1万 | 注文ヘッダ (2024-01〜2026-08、チャネル・ステータス) |
+| `order_items` | 約10万 | 注文明細 (数量・割引率・売上金額) |
+| `sales` (ビュー) | - | completed の明細に注文・顧客・商品を結合した分析用ビュー (粗利つき) |
+
+チャートで違いが見えるよう、以下の傾向を入れています。
+
+- 売上は期間を通じて右肩上がり (約1.8倍)。12月と7月が高く、2月が低い
+- カテゴリごとに売れる月が違う (飲料は夏、家電は3月・12月、ファッションは春秋)
+- チャネルはアプリの比率が年々上がり、店舗が下がる
+- 7月・12月はセールで割引の明細が増える
 
 ## 実行
 
@@ -71,11 +95,13 @@ cd generative_ui/frontend && npm run runtime
 cd generative_ui/frontend && npm run dev
 ```
 
-質問の例 (デフォルトのデータセット `bigquery-public-data.thelook_ecommerce`):
+質問の例:
 
-- 2024年の月別売上の推移を見せて
-- 売上上位10カテゴリを比較したい
-- 注文ステータスの構成比は？
+- 月別の売上推移を見せて
+- カテゴリ別の売上を年ごとに比較したい
+- チャネル別の売上構成比は？ 年ごとの変化も見たい
+- 都道府県別の売上トップ10は？
+- 飲料の月別売上に季節性はある？
 
 エージェント単体の動作は ADK Web でも確認できます (チャートは描画されず、ツール呼び出しの内容だけが表示されます)。
 
