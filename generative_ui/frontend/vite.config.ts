@@ -1,7 +1,8 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
-const RUNTIME_URL = process.env.RUNTIME_URL ?? "http://localhost:4000";
+// localhost は環境によって IPv6 (::1) に解決され接続できないため、IPv4 を明示する
+const RUNTIME_URL = process.env.RUNTIME_URL ?? "http://127.0.0.1:4000";
 
 export default defineConfig({
   plugins: [react()],

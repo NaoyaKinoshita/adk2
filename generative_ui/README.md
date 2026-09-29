@@ -137,6 +137,15 @@ cd generative_ui/frontend && npm run typecheck
 
 Gemini の呼び出しには、429 / 503 に対する指数バックオフのリトライ (最大5回) と、60秒のタイムアウトを設定しています。
 
+## トラブルシューティング
+
+| 症状 | 原因と対処 |
+|---|---|
+| Vite に `http proxy error: /api/copilotkit/...` | Copilot Runtime (:4000) に接続できていない。`npm run runtime` が起動しているか、そのターミナルにエラーが出ていないかを確認する (Node 20 以上が必要) |
+| チャットを送ると Runtime 側で接続エラー | エージェント (:8000) が起動していない。`uv run uvicorn server:app --port 8000` を確認する |
+
+いずれのサーバーも `127.0.0.1` で待ち受けます。`localhost` を使うと、環境によっては IPv6 (`::1`) に解決されて接続できないためです。
+
 ## 既知の制約・次のステップ
 
 - **Step 2: データエージェントの分離**
